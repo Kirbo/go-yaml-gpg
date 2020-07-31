@@ -1,2 +1,3 @@
 configs/*.yaml
 goyaml
+secrets/public_keys/my_key.asc

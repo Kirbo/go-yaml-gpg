@@ -9,6 +9,12 @@ The beaf of this repository is to demonstrate how encrypt and decrypt YAML files
 ./secrets/import_keys.sh
 ```
 
+## Export your Public key
+
+```sh
+./secrets/export_key.sh
+```
+
 
 ## Encrypt / Decrypt secrets
 
