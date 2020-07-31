@@ -14,13 +14,3 @@ done
 
 echo "Adding trust to keys"
 for fpr in $(gpg --list-keys --with-colons  | awk -F: '/fpr:/ {print $10}' | sort -u); do echo -e "5\ny\n" | gpg --command-fd 0 --expert --edit-key $fpr trust; done 
-
-# echo "Signing keys"
-# OUTPUT=$(for fpr in $(gpg --list-keys --with-colons  | awk -F: '/fpr:/ {print $10}' | sort -u); do echo -e "y\ny\n" |  gpg --command-fd 0 --expert --edit-key $fpr sign; done)
-# STATUS=$?
-# if [[ "${STATUS}" != "0" ]]; then
-#     echo "----"
-#     echo "!!! Failed !!!"
-#     echo "${OUTPUT}"
-#     exit
-# fi

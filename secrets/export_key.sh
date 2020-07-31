@@ -4,7 +4,24 @@ DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 
 cd ${DIR}
 
-echo "Exporting key 'secrets/public_keys/my_key.asc'"
-gpg --armor --export *@worddive.com > public_keys/my_key.asc
+read -p "Please provide your fullname, e.g.: Firstname Lastname: " FULLNAME
+read -n 1 -p "Is this name correct: '${FULLNAME}'? [ y / N ]: " ANSWER
 
-echo "Remember to rename the 'secrets/public_keys/my_key.asc' with your name before commiting!"
+case $ANSWER in
+    [Yy]* ) echo;;
+    * ) echo "Please start over"; exit;;
+esac
+
+UNDERSCORED=$(echo "${FULLNAME}" | sed -e 's/ /_/g')
+LOWECASE=$(echo "${UNDERSCORED}" | tr '[:upper:]' '[:lower:]')
+EMAIL="${LOWERCASE}@worddive.com"
+
+KEYID=$(gpg --list-keys --with-colons ${EMAIL} | awk -F: '/^pub:/ { print $5 }')
+
+FILENAME="${UNDERSCORED}_(${KEYID}).asc"
+
+echo "Exporting key 'secrets/public_keys/${FILENAME}'"
+gpg --armor --export ${EMAIL} > public_keys/${FILENAME}
+
+echo "Adding into 'secrets/authorized_keys'"
+echo "${KEYID}    # ${FULLNAME}" >> authorized_keys
