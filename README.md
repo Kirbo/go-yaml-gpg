@@ -2,6 +2,14 @@
 
 The beaf of this repository is to demonstrate how encrypt and decrypt YAML files using GPG and how to store environmental variables in YAML files, which can be easily loaded into the `main.go`.
 
+
+## Import the Public keys
+
+```sh
+./secrets/import_keys.sh
+```
+
+
 ## Encrypt / Decrypt secrets
 
 The YAML config files can be decrypted with command:
@@ -33,6 +41,7 @@ To add access to decrypt the secrets, you need to:
 5. ..and run the `scripts/decrypt.sh` script.
 
 Now you should have decrypted YAML files under the `configs/` path
+
 
 ## Using environmental configs
 
