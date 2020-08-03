@@ -1,52 +1,30 @@
 # Go Yaml GPG
 
-The beaf of this repository is to demonstrate how encrypt and decrypt YAML files using GPG and how to store environmental variables in YAML files, which can be easily loaded into the `main.go`.
+The beaf of this repository is to demonstrate how to encrypt and decrypt YAML files using GPG and how to store environmental variables in YAML files, which can be easily loaded into the `main.go`.
 
 
-## Import the Public keys
+## Prequisites
 
+Install the GPG Suite with Brew:
 ```sh
-./secrets/import_keys.sh
-```
-
-## Export your Public key
-
-```sh
-./secrets/export_key.sh
+brew cask install gpg-suite
 ```
 
 
-## Encrypt / Decrypt secrets
+## Steps to add yourself into authorized keys
 
-The YAML config files can be decrypted with command:
-```sh
-# To decrypt all the configs
-./secrects/decrypt.sh
-
-# To decrypt only the `dev` environment YAML
-./secrects/decrypt.sh dev
-```
-..and encrypted with:
-```sh
-# To encrypt all the ./configs/*.yaml
-./secrects/encrypt.sh
-
-# To encrypt only the `tst` environment YAML
-./secrects/encrypt.sh tst
-```
-
-
-## Adding authorized public keys
-
-To add access to decrypt the secrets, you need to:
-1. Add the KEY ID of the new public key, into the `secrets/authorized_keys` file
-2. Encrypt the secrets again, since it will add the previously added key into the recipients
-3. Push the changes into the repository
-
-4. The person whos key just got added, should then pull the changes
-5. ..and run the `scripts/decrypt.sh` script.
-
-Now you should have decrypted YAML files under the `configs/` path
+1. Clone this repo
+2. Run `./secrets/generate_key.sh`
+    - Answer the questions the script asks
+3. Commit & Push changes
+4. Ask someone who is listed in the `./secrets/authorized_keys` to:
+    1. Pull the changes
+    2. Run `./secrets/import_keys.sh`
+    3. Run `./secrets/encrypt.sh`
+    4. Commit & Push changes
+5. You'll need to Pull the changes
+6. Run `./secrets/decrypt.sh`
+7. Now you _should_ have decoded config files, e.g.: `./configs/dev.yaml`
 
 
 ## Using environmental configs
@@ -72,4 +50,44 @@ ENV=tst ./goyaml
 
 # By passing it as a flag
 ./goyaml --env=tst
+```
+
+## Helpful commands:
+
+### Generating GPG key
+
+```sh
+./secrets/generate_key.sh
+```
+
+### Import the Public keys
+
+```sh
+./secrets/import_keys.sh
+```
+
+### Export your Public key
+
+```sh
+./secrets/export_key.sh
+```
+
+
+### Encrypt / Decrypt secrets
+
+The YAML config files can be decrypted with command:
+```sh
+# To decrypt all the configs
+./secrects/decrypt.sh
+
+# To decrypt only the `dev` environment YAML
+./secrects/decrypt.sh dev
+```
+..and encrypted with:
+```sh
+# To encrypt all the `./configs/*.yaml` files
+./secrects/encrypt.sh
+
+# To encrypt only the `tst` environment YAML
+./secrects/encrypt.sh tst
 ```
